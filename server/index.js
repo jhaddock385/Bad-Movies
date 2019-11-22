@@ -1,19 +1,20 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var request = require("request");
-var app = express();
+var express = require('express')
+var bodyParser = require('body-parser')
+var request = require('request')
+var app = express()
+const { upsertMovies, findMovies } = require('../db/mongodb/index.js')
 
 // Sign up and get your moviedb API key here:
 // https://www.themoviedb.org/account/signup
 
 //Helpers
-var apiHelpers = require("./helpers/apiHelpers.js");
+var apiHelpers = require('./helpers/apiHelpers.js')
 
 //Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 // Due to express, when you load the page, it doesn't make a get request to '/', it simply serves up the dist folder
-app.use(express.static(__dirname + "/../client/dist"));
+app.use(express.static(__dirname + '/../client/dist'))
 
 //***********************************************************************************************************************
 
@@ -29,44 +30,52 @@ Use the routes below to build your application:
 
 */
 
-//TODO: Pick one of the two route options below:
-//OPTION 1: Use regular routes, where endpoints are pre-defined on this page, you do NOT need to refer to /server/routes/movieRoutes.js file
-//OPTION 2: Use Express Router, where the routes are defined under /server/routes/movieRoutes.js file
+// app.get('/favorites', (req, res) => {
+// })
 
-//***********************************************************************************************************************
-//OPTION 1: Use regular routes;
-//If you are using OPTION 1, you do not need routes>movieRoutes.js file
-
-app.get("/genres", function(req, res) {
+app.get('/genres', (req, res) => {
   // make an axios request to get the official list of genres from themoviedb
   // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
-});
+  //send to controller
+})
 
-app.get("/search", function(req, res) {
+app.get('/search', (req, res) => {
   // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
   // and sort them by votes (worst first) using the search parameters in themoviedb API
   // do NOT save the results into the database; render results directly on the page
-});
 
-app.post("/save", function(req, res) {
+  console.log('server: .get /search request')
+  //res.body
+  findMovies()
+    .then((movies) => {
+      res.status(200).send(movies)
+      console.log(movies)
+      //console.log(res)
+    })
+    .catch((err) => {
+      console.log('server: error with findMovies')
+    })
+})
+
+app.post('/save', function(req, res) {
   //save movie as favorite into the database
-});
+})
 
-app.post("/delete", function(req, res) {
+app.post('/delete', function(req, res) {
   //remove movie from favorites into the database
-});
+})
 
 //***********************************************************************************************************************
 //OPTION 2: Use Express Router
 
 //IF you decide to go with this OPTION 2, delete OPTION 1 to continue
 
-//Routes
-const movieRoutes = require("./routes/movieRoutes.js");
+// Routes
+const movieRoutes = require('./routes/movieRoutes.js')
 
-//Use routes
-app.use("/movies", movieRoutes);
+// // Use routes
+app.use('/movies', movieRoutes)
 
-app.listen(3000, function() {
-  console.log("listening on port 3000!");
-});
+app.listen(4000, function() {
+  console.log('listening on port 4000!')
+})
