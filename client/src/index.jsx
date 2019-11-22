@@ -11,7 +11,12 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      movies: [{ deway: 'movies' }],
+      movies: [
+        { title: 'looper', descrption: 'lorum ipsum', rating: '4.5', id: 1 },
+        { title: 'upstream', descrption: 'ipsum', rating: '10', id: 2 },
+        { title: 'it', descrption: 'lorum ipsum', rating: '4.5', id: 3 }
+      ],
+
       favorites: [{ deway: 'favorites' }],
       showFaves: false
     }
@@ -22,7 +27,7 @@ class App extends React.Component {
   componentDidMount() {
     this.getMovies()
       .then((res) => {
-        console.log('client: get /search success')
+        console.log('client: get worst movies success')
         console.log('response:')
         console.log(res)
         //this.setState

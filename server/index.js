@@ -3,6 +3,7 @@ var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
 const { upsertMovies, findMovies } = require('../db/mongodb/index.js')
+const { getMoviesFromAPI } = require('./helpers/apiHelpers.js')
 
 // Sign up and get your moviedb API key here:
 // https://www.themoviedb.org/account/signup
@@ -39,16 +40,16 @@ app.get('/genres', (req, res) => {
   //send to controller
 })
 
-app.get('/search', (req, res) => {
+app.get('/save', (req, res) => {
   // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
   // and sort them by votes (worst first) using the search parameters in themoviedb API
   // do NOT save the results into the database; render results directly on the page
 
-  console.log('server: .get /search request')
+  console.log('server: ')
   //res.body
   findMovies()
-    .then((movies) => {
-      res.status(200).send(movies)
+    .then((favs) => {
+      res.status(200).send(favs)
       console.log(movies)
       //console.log(res)
     })
@@ -57,9 +58,22 @@ app.get('/search', (req, res) => {
     })
 })
 
-app.post('/save', function(req, res) {
+app.get('/search', function(req, res) {
   //save movie as favorite into the database
+  getMoviesFromAPI()
+    .then((results) => {
+      console.log('server: getMoviesFromApi success')
+      //console.log(results)
+      //console.log(results.data)
+      res.status(200).send(results.data)
+    })
+    .catch((err) => {
+      console.log('server: getMoviesFromApi error')
+      console.log(err)
+    })
 })
+
+//app.post('/save', function(req, res) {
 
 app.post('/delete', function(req, res) {
   //remove movie from favorites into the database
