@@ -1,26 +1,31 @@
 import React from 'react'
 
 function Movie(props) {
-  console.log(props.dep)
+  console.log
+  console.log(props)
   return (
-    <ul className="movies">
-      <li className="movie_item">
-        <img src="https://images-na.ssl-images-amazon.com/images/I/518JHKEF17L.jpg" />
-        <div className="movie_description">
-          <h2>{props.title}</h2>
-          <section className="movie_details">
-            <div className="movie_year">
-              <span className="title">Year</span>
-              <span>{props.date}</span>
-            </div>
-            <div className="movie_rating">
-              <span className="title">Rating</span>
-              <span>{props.rating}</span>
-            </div>
-          </section>
-        </div>
-      </li>
-    </ul>
+    <li
+      className="movie_item"
+      onClick={(event) => {
+        console.log('log from Movie: ' + props)
+        props.handleClick(props)
+      }}
+    >
+      <img src="https://images-na.ssl-images-amazon.com/images/I/518JHKEF17L.jpg" />
+      <div className="movie_description">
+        <h2>{props.title}</h2>
+        <section className="movie_details">
+          <div className="movie_year">
+            <span className="title">Year</span>
+            <span>{props.date}</span>
+          </div>
+          <div className="movie_rating">
+            <span className="title">Rating</span>
+            <span>{props.rating}</span>
+          </div>
+        </section>
+      </div>
+    </li>
   )
 }
 

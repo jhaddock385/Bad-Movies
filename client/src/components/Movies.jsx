@@ -14,18 +14,23 @@ class Movies extends React.Component {
 
   render() {
     var testArray = this.props.movies
+    console.log('testArray:')
+    console.log(testArray)
 
     let movieslots = testArray.map((movie) => {
+      console.log(movie)
       return (
-        <div className="slot">
+        <ul className="movies">
           <Movie
             title={movie.title}
             key={movie.id}
+            id={movie.id}
             description={movie.description}
-            date={'12-06-1992'}
+            date={movie.date}
             rating={movie.rating}
+            handleClick={this.props.handleClick}
           />
-        </div>
+        </ul>
       )
     })
     return movieslots
@@ -33,12 +38,3 @@ class Movies extends React.Component {
 }
 
 export default Movies
-
-{
-  /* <Movies
-            movies={
-              this.state.showFaves ? this.state.favorites : this.state.movies
-            }
-            showFaves={this.state.showFaves}
-          /> */
-}

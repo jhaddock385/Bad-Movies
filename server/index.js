@@ -2,7 +2,7 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
-const { upsertMovies, findMovies } = require('../db/mongodb/index.js')
+const { upsertMovies, findMovies, addFave } = require('../db/mongodb/index.js')
 const { getMoviesFromAPI } = require('./helpers/apiHelpers.js')
 
 // Sign up and get your moviedb API key here:
@@ -40,32 +40,62 @@ app.get('/genres', (req, res) => {
   //send to controller
 })
 
-app.get('/save', (req, res) => {
-  // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
-  // and sort them by votes (worst first) using the search parameters in themoviedb API
-  // do NOT save the results into the database; render results directly on the page
+app.post('/save', (req, res) => {
+  console.log('server: post /save')
+  console.log('server: movie to save:')
+  console.log(req.body)
+  res.status(200).send()
+  addFave(req.body)
+  // .then((data) => {
+  //   console.log('server: upsertMovie success')
+  //   console.log(data)
+  // })
+  // .catch((err) => {
+  //   console.log('server: upsertMovie error')
+  //   console.log(err)
+  // })
 
-  console.log('server: ')
-  //res.body
-  findMovies()
-    .then((favs) => {
-      res.status(200).send(favs)
-      console.log(movies)
-      //console.log(res)
-    })
-    .catch((err) => {
-      console.log('server: error with findMovies')
-    })
+  // console.log('server: post /save')
+  // console.log('server: movie to save:')
+  // console.log(req.body)
+  // res.status(200).send()
+  // upsertMovies(null, req.body)
+  //   .then((data) => {
+  //     console.log('server: upsertMovie success')
+  //     console.log(data)
+  //   })
+  //   .catch((err) => {
+  //     console.log('server: upsertMovie error')
+  //     console.log(err)
+  //   })
 })
 
 app.get('/search', function(req, res) {
-  //save movie as favorite into the database
   getMoviesFromAPI()
-    .then((results) => {
+    .then(({ data }) => {
       console.log('server: getMoviesFromApi success')
-      //console.log(results)
-      //console.log(results.data)
-      res.status(200).send(results.data)
+      console.log('movies: ')
+      let x = data.results
+      // console.log(movies)
+
+      let parsed = x.map((movie) => {
+        //console.log(movie)
+        let temp = {
+          title: movie.title,
+          description: movie.overview,
+          genre: movie.genre_ids,
+          rating: movie.popularity,
+          date: movie.release_date,
+          api_id: movie.id,
+          image: movie.poster_path
+          //id: '2'
+        }
+        return temp
+      })
+
+      console.log('parsed')
+      //console.log(parsed)
+      res.status(200).send(parsed)
     })
     .catch((err) => {
       console.log('server: getMoviesFromApi error')

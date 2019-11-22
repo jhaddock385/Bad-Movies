@@ -18,11 +18,22 @@ db.once('open', () => {
 
 var Schema = mongoose.Schema
 
+// api_id: 650005
+// date: "2019-11-21"
+// description: "History is at our fingertips, it's time to use it.  A depiction of reality stripped of hierarchical boundaries of fact and fiction. Only concepts with image and movement being paramount. The good times don't stop when you stop having fun."
+// genre: []
+// image: "/3XuUX40l0ARUOvQZLpJJNatFTRh.jpg"
+// rating: 0
+// title: "Pierced Reality"
+
 var movieSchema = new Schema({
-  name: String,
+  api_id: String,
+  id: String,
+  title: String,
   year: Date,
   rating: Number,
-  genre: String
+  genre: String,
+  description: String
 })
 
 const Movie = mongoose.model('Movie', movieSchema)
@@ -33,11 +44,16 @@ const Movie = mongoose.model('Movie', movieSchema)
 // })
 
 const upsertMovies = (filter, update) => {
-  console.log('db: addMovies')
-  return Character.findOneAndUpdate(filter, update, {
+  console.log('db: upsertMovies')
+  return Movie.findOneAndUpdate(filter, update, {
     new: true,
     upsert: true // Make this update into an upsert
   })
+}
+
+const addFave = (newFave) => {
+  var fave = new Movie(newFave)
+  return fave.save(function(err) {})
 }
 
 const findMovies = () => {
@@ -47,4 +63,5 @@ const findMovies = () => {
 
 module.exports.upsertMovies = upsertMovies
 module.exports.findMovies = findMovies
+module.exports.addFave = addFave
 module.exports.db = db
