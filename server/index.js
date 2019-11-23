@@ -40,34 +40,13 @@ app.get('/genres', (req, res) => {
   //send to controller
 })
 
+//THIS IS THE REAL ONE!!! THIS ONE WORKS!!!
 app.post('/save', (req, res) => {
   console.log('server: post /save')
   console.log('server: movie to save:')
-  console.log(req.body)
+  // console.log(req.body)
   res.status(200).send()
   addFave(req.body)
-  // .then((data) => {
-  //   console.log('server: upsertMovie success')
-  //   console.log(data)
-  // })
-  // .catch((err) => {
-  //   console.log('server: upsertMovie error')
-  //   console.log(err)
-  // })
-
-  // console.log('server: post /save')
-  // console.log('server: movie to save:')
-  // console.log(req.body)
-  // res.status(200).send()
-  // upsertMovies(null, req.body)
-  //   .then((data) => {
-  //     console.log('server: upsertMovie success')
-  //     console.log(data)
-  //   })
-  //   .catch((err) => {
-  //     console.log('server: upsertMovie error')
-  //     console.log(err)
-  //   })
 })
 
 app.get('/search', function(req, res) {
@@ -80,6 +59,14 @@ app.get('/search', function(req, res) {
 
       let parsed = x.map((movie) => {
         //console.log(movie)
+
+        if (movie.poster_path !== null) {
+          var parsedImage = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        } else {
+          var parsedImage =
+            'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+        }
+
         let temp = {
           title: movie.title,
           description: movie.overview,
@@ -87,15 +74,31 @@ app.get('/search', function(req, res) {
           rating: movie.popularity,
           date: movie.release_date,
           api_id: movie.id,
-          image: movie.poster_path
+          image: parsedImage
           //id: '2'
         }
         return temp
       })
 
-      console.log('parsed')
+      // console.log('parsed')
       //console.log(parsed)
       res.status(200).send(parsed)
+    })
+    .catch((err) => {
+      console.log('server: getMoviesFromApi error')
+      console.log(err)
+    })
+})
+
+app.get('/Faves', function(req, res) {
+  console.log('server: faves')
+  findMovies()
+    .then((data) => {
+      console.log('server: fave  movies request')
+      // console.log('faves: ')
+      // console.log(data)
+
+      res.status(200).send(data)
     })
     .catch((err) => {
       console.log('server: getMoviesFromApi error')
@@ -108,6 +111,30 @@ app.get('/search', function(req, res) {
 app.post('/delete', function(req, res) {
   //remove movie from favorites into the database
 })
+//===============
+//testing to switch from addFave to upsert
+//I need to ask the helpdesk about this tomorrow
+// I seriously have tested this every which way I can think of, and it just isn't working
+//it always updates the first doc, regardless of what I do
+//
+// app.post('/save', (req, res) => {
+//   console.log('  ')
+//   console.log('server: post /save')
+//   console.log('trying to upsert')
+//   console.log('REQ ID: :')
+//   console.log(req.body)
+//   res.status(200).send()
+//   upsertMovies(req.body.api_id, req.body)
+//     .then((data) => {
+//       console.log('server: upsertMovie success')
+//       console.log('RETURNED ID:')
+//       console.log(data)
+//     })
+//     .catch((err) => {
+//       console.log('server: upsertMovie error:')
+//       console.log(err)
+//     })
+// })
 
 //***********************************************************************************************************************
 //OPTION 2: Use Express Router

@@ -26,13 +26,16 @@ var Schema = mongoose.Schema
 // rating: 0
 // title: "Pierced Reality"
 
+//https://www.themoviedb.org/3XuUX40l0ARUOvQZLpJJNatFTRh.jpg
+
 var movieSchema = new Schema({
-  api_id: String,
+  api_id: Number,
   id: String,
   title: String,
-  year: Date,
+  date: Date,
   rating: Number,
   genre: String,
+  image: String,
   description: String
 })
 
@@ -59,6 +62,15 @@ const addFave = (newFave) => {
 const findMovies = () => {
   console.log('db: findMovies')
   return Movie.find()
+  //.then((data) => {
+  //   console.log('db: get faves')
+  //   console.log(data)
+
+  // })
+}
+
+const deleteMovies = () => {
+  console.log('db: deleteMovies')
 }
 
 module.exports.upsertMovies = upsertMovies

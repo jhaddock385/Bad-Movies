@@ -1,17 +1,17 @@
 import React from 'react'
 
 function Movie(props) {
-  console.log
-  console.log(props)
+  //   console.log('PROPS')
+  //   console.log(props)
   return (
     <li
       className="movie_item"
       onClick={(event) => {
-        console.log('log from Movie: ' + props)
+        //console.log('log from Movie: ' + props)
         props.handleClick(props)
       }}
     >
-      <img src="https://images-na.ssl-images-amazon.com/images/I/518JHKEF17L.jpg" />
+      <img src={props.image} />
       <div className="movie_description">
         <h2>{props.title}</h2>
         <section className="movie_details">
@@ -29,6 +29,7 @@ function Movie(props) {
   )
 }
 
+// {`https://image.tmdb.org/t/p/w500${props.image}`}
 // Make an onClick for each list item. If the movies shown is the search results,
 // onClick add it to the database (do it in the main app, and pass down the function)
 

@@ -11,35 +11,13 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      movies: [
-        {
-          title: 'looper',
-          descrption: 'lorum ipsum',
-          rating: '4.5',
-          date: '12-12-1990',
-          id: '1'
-        },
-        {
-          title: 'the room',
-          descrption: 'lorum ipsum',
-          rating: '4.5',
-          date: '12-12-1990',
-          id: '2'
-        },
-        {
-          title: 'it',
-          description: 'lorum ipsum',
-          rating: '4.5',
-          date: '12-12-1990',
-          id: '3'
-        }
-      ],
-
+      movies: [],
       favorites: [{ deway: 'favorites' }],
       showFaves: false
     }
 
     this.handleMoviePanelClick = this.handleMoviePanelClick.bind(this)
+    this.swapFavorites = this.swapFavorites.bind(this)
 
     // you might have to do something important here!
   }
@@ -52,15 +30,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.getFaves()
     this.getMovies()
       .then((res) => {
         console.log('client: get worst movies success')
         //console.log('response:')
         //console.log(res)
-        console.log(res)
+        //console.log(res)
         this.setState({ movies: res.data })
         console.log('new state')
-        console.log(this.state)
+        //console.log(this.state)
+        this.render()
       })
       .catch(() => {
         console.log('client: get /search ERROR')
@@ -72,6 +52,21 @@ class App extends React.Component {
       method: 'get',
       url: 'http://localhost:4000/Search'
     })
+  }
+
+  getFaves() {
+    return axios({
+      method: 'get',
+      url: 'http://localhost:4000/Faves'
+    })
+      .then((faves) => {
+        console.log('getFaves:')
+        console.log(faves.data)
+        this.setState({ favorites: faves.data })
+      })
+      .catch((err) => {
+        console.log('getFaves error')
+      })
   }
 
   saveMovie(movie) {
